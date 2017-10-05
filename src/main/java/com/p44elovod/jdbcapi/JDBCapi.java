@@ -7,10 +7,10 @@ public class JDBCapi {
 
 
     static final String JDBC_DRIVER = "com.mysql.jdbc.Driver";
-    static String url = "jdbc:mysql://localhost:3306/web_project_db";
-    static String login = "root";
-    static String password = "28101986";
-    static String query = "select * from employees";
+    static String url = "";
+    static String login = "";
+    static String password = "";
+    static String query = "";
 
 
 
