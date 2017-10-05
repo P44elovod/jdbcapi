@@ -1,5 +1,6 @@
 package com.p44elovod.jdbcapi;
 
+
 import java.sql.*;
 
 public class JDBCapi {
@@ -8,40 +9,49 @@ public class JDBCapi {
     static final String JDBC_DRIVER = "com.mysql.jdbc.Driver";
 
 
+    public static void main(String[] args) {
+        String url = "";
+        String login = "";
+        String password = "";
+        String query = "";
 
 
-    public static void main(String[] args){
-       String url = "";
-       String login = "";
-       String password = "";
-       String query = "";
-       try {
+        try {
+            Class.forName(JDBC_DRIVER);
+        } catch (ClassNotFoundException e) {
+            System.out.println("WTF Class" + e.getMessage());
+        }
 
 
-        Connection connection = DriverManager.getConnection(login, url,password);
-           System.out.println("Соединение установлено");
+        try {
+            Connection connection = DriverManager.getConnection(url, login, password);
+            System.out.println("Соединение установлено");
 
-           Statement statement = null;
-           connection.createStatement();
-           ResultSet result = statement.executeQuery(query);
+            Statement statement = connection.createStatement();
 
-           while (result.next()){
-               System.out.println("");
-               System.out.println("");
-               System.out.println("");
-               System.out.println("");
-           }
+            ResultSet result = statement.executeQuery(query);
+            int columns = result.getMetaData().getColumnCount();
+
+            while (result.next()) {
+                for (int i = 1; i <= columns; i++) {
+                    System.out.print(result.getString(i) + "\t");
+                }
+                System.out.println();
+
+            }
+
+            result.close();
+            statement.close();
+            connection.close();
 
 
+        } catch (SQLException e) {
+            System.out.println("Что-то пошло не так..." + e.getMessage());
+            e.printStackTrace();
 
-       }catch (SQLException e){
-           System.out.println("Что-то пошло не так...");
-           e.printStackTrace();
-       }
+
+        }
 
 
     }
-
-
-
 }
