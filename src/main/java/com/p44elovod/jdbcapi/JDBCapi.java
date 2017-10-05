@@ -7,11 +7,10 @@ public class JDBCapi {
 
 
     static final String JDBC_DRIVER = "com.mysql.jdbc.Driver";
-    static String url = "";
+    static String url = "jdbc:mysql://localhost:3306/web_project_db";
     static String login = "";
     static String password = "";
     static String query = "";
-
 
 
     private static Connection getDbConnection() {
@@ -19,76 +18,59 @@ public class JDBCapi {
         try {
             Class.forName(JDBC_DRIVER);
         } catch (ClassNotFoundException e) {
-            System.out.println("JDBC драйвер заболел....  "+e.getMessage());
+            System.out.println("JDBC драйвер заболел....  " + e.getMessage());
         }
         try {
-            сonnection = DriverManager.getConnection(url, login,password);
+            сonnection = DriverManager.getConnection(url, login, password);
             System.out.println("Соединение установлено");
             return сonnection;
         } catch (SQLException e) {
-            System.out.println("Что-то пошло не так с соединением.... "+e.getMessage());
+            System.out.println("Что-то пошло не так с соединением.... " + e.getMessage());
         }
         return сonnection;
     }
 
     private static void createDbTableOrDeleteData() throws SQLException {
-        Connection dbConnection = null;
-        Statement statement = null;
+
 
         String createTableSQL = query;
 
-        try {
-            dbConnection = getDbConnection();
-            statement = dbConnection.createStatement();
 
+        try (Connection dbConnection = getDbConnection();
+             Statement statement = dbConnection.createStatement()) {
 
             statement.execute(createTableSQL);
             System.out.println("Действие успешно выполнено");
         } catch (SQLException e) {
-            System.out.println("Что-то пошло не так...."+e.getMessage());
-        } finally {
-            if (statement != null) {
-                statement.close();
-            }
-            if (dbConnection != null) {
-                dbConnection.close();
-            }
+            System.out.println("Что-то пошло не так...." + e.getMessage());
         }
     }
+
     private static void insertIntoDbTable() throws SQLException {
-        Connection dbConnection = null;
-        Statement statement = null;
+
 
         String insertData = query;
 
-        try {
-            dbConnection = getDbConnection();
-            statement = dbConnection.createStatement();
+        try (Connection dbConnection = getDbConnection();
+             Statement statement = dbConnection.createStatement()) {
+
 
 
             statement.executeUpdate(insertData);
             System.out.println("Данные успешно добавлены");
         } catch (SQLException e) {
-            System.out.println("Что-то пошло не так...."+e.getMessage());
-        } finally {
-            if (statement != null) {
-                statement.close();
-            }
-            if (dbConnection != null) {
-                dbConnection.close();
-            }
+            System.out.println("Что-то пошло не так...." + e.getMessage());
         }
     }
 
     private static void displayDataFromDbTable() throws SQLException {
-        Connection dbConnection = null;
-        Statement statement = null;
+
 
         String insertData = query;
 
-        try {
-            dbConnection = getDbConnection();
-            statement = dbConnection.createStatement();
+        try (Connection dbConnection = getDbConnection();
+             Statement statement = dbConnection.createStatement()) {
+
 
 
             ResultSet result = statement.executeQuery(query);
@@ -102,42 +84,28 @@ public class JDBCapi {
 
             }
         } catch (SQLException e) {
-            System.out.println("Что-то пошло не так...."+e.getMessage());
-        } finally {
-            if (statement != null) {
-                statement.close();
-            }
-            if (dbConnection != null) {
-                dbConnection.close();
-            }
+            System.out.println("Что-то пошло не так...." + e.getMessage());
         }
     }
 
 
-
     public static void main(String[] args) throws SQLException {
-String key = query
-        .toLowerCase()
-        .trim()
-        .split(" ")[0];
+        String key = query
+                .toLowerCase()
+                .trim()
+                .split(" ")[0];
 
-        if (key.equals("create")|| key.equals("delete")){
+        if (key.equals("create") || key.equals("delete")) {
             createDbTableOrDeleteData();
-        }else if (key.equals("insert")){
+        } else if (key.equals("insert")) {
             insertIntoDbTable();
-        }else if (key.equals("select")){
+        } else if (key.equals("select")) {
             displayDataFromDbTable();
         }
 
 
+    }
 
 
 }
-
-
-
-
-
-
-    }
 
